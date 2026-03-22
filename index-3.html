@@ -1,0 +1,1738 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Friseur Akademie Offenburg — Dein Stil. Deine Kunst.</title>
+<meta name="description" content="Friseur Akademie Offenburg — Premium Haircare & Ausbildung. Schnitt, Farbe, Balayage. Ritterstraße 4, 77652 Offenburg.">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Syne:wght@400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #0A0A0A;
+    --cream: #F5F0E8;
+    --gold: #C9A84C;
+    --lime: #D4FF57;
+    --muted: #2C2C2C;
+    --mid: #1A1A1A;
+    --font-display: 'Playfair Display', serif;
+    --font-body: 'Syne', sans-serif;
+    --font-mono: 'Space Mono', monospace;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--cream);
+    font-family: var(--font-body);
+    overflow-x: hidden;
+    cursor: none;
+  }
+
+  /* ─── CUSTOM CURSOR ─── */
+  #cursor-dot {
+    position: fixed; top: 0; left: 0; z-index: 9999;
+    width: 8px; height: 8px;
+    background: var(--gold);
+    border-radius: 50%;
+    pointer-events: none;
+    transform: translate(-50%, -50%);
+    transition: transform 0.05s, background 0.2s, width 0.2s, height 0.2s;
+  }
+  #cursor-ring {
+    position: fixed; top: 0; left: 0; z-index: 9998;
+    width: 36px; height: 36px;
+    border: 1.5px solid var(--gold);
+    border-radius: 50%;
+    pointer-events: none;
+    transform: translate(-50%, -50%);
+    transition: transform 0.12s ease-out, width 0.3s, height 0.3s, border-color 0.3s, opacity 0.3s;
+    opacity: 0.7;
+  }
+  body.cursor-hover #cursor-ring {
+    width: 60px; height: 60px; border-color: var(--lime); opacity: 1;
+  }
+
+  /* ─── NAV ─── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 28px 48px;
+    mix-blend-mode: normal;
+    transition: background 0.4s, padding 0.4s;
+  }
+  nav.scrolled {
+    background: rgba(10,10,10,0.92);
+    backdrop-filter: blur(20px);
+    padding: 18px 48px;
+    border-bottom: 1px solid rgba(201,168,76,0.15);
+  }
+  .nav-logo {
+    font-family: var(--font-display);
+    font-size: 1.2rem;
+    font-style: italic;
+    color: var(--cream);
+    letter-spacing: 0.02em;
+    text-decoration: none;
+  }
+  .nav-logo span { color: var(--gold); }
+  .nav-links {
+    display: flex; gap: 40px; list-style: none;
+  }
+  .nav-links a {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: rgba(245,240,232,0.65);
+    text-decoration: none;
+    position: relative;
+    transition: color 0.2s;
+  }
+  .nav-links a::after {
+    content: '';
+    position: absolute; bottom: -3px; left: 0;
+    width: 0; height: 1px;
+    background: var(--gold);
+    transition: width 0.3s ease;
+  }
+  .nav-links a:hover { color: var(--cream); }
+  .nav-links a:hover::after { width: 100%; }
+  .nav-cta {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--bg);
+    background: var(--gold);
+    padding: 10px 22px;
+    text-decoration: none;
+    transition: background 0.2s, color 0.2s;
+  }
+  .nav-cta:hover { background: var(--lime); color: var(--bg); }
+
+  /* ─── HERO ─── */
+  #hero {
+    position: relative;
+    height: 100vh; min-height: 700px;
+    display: flex; align-items: center; justify-content: center;
+    overflow: hidden;
+  }
+  #hero-canvas {
+    position: absolute; inset: 0;
+    width: 100%; height: 100%;
+    z-index: 0;
+  }
+  .hero-overlay {
+    position: absolute; inset: 0;
+    background: linear-gradient(to bottom, rgba(10,10,10,0.3) 0%, rgba(10,10,10,0.15) 40%, rgba(10,10,10,0.7) 100%);
+    z-index: 1;
+  }
+  .hero-content {
+    position: relative; z-index: 2;
+    text-align: center;
+    padding: 0 24px;
+  }
+  .hero-label {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 28px;
+    opacity: 0;
+    animation: fadeUp 0.8s 0.3s ease forwards;
+  }
+  .hero-title {
+    font-family: var(--font-display);
+    font-size: clamp(3.5rem, 9vw, 9rem);
+    font-weight: 900;
+    line-height: 0.92;
+    letter-spacing: -0.02em;
+    margin-bottom: 32px;
+    opacity: 0;
+    animation: fadeUp 1s 0.5s ease forwards;
+  }
+  .hero-title em {
+    font-style: italic;
+    color: var(--gold);
+  }
+  .hero-title .line2 {
+    display: block;
+    -webkit-text-stroke: 1.5px var(--cream);
+    color: transparent;
+  }
+  .hero-sub {
+    font-size: 1rem;
+    color: rgba(245,240,232,0.6);
+    letter-spacing: 0.05em;
+    margin-bottom: 48px;
+    opacity: 0;
+    animation: fadeUp 0.8s 0.8s ease forwards;
+  }
+  .hero-btns {
+    display: flex; gap: 16px; justify-content: center; flex-wrap: wrap;
+    opacity: 0;
+    animation: fadeUp 0.8s 1s ease forwards;
+  }
+  .btn-primary {
+    background: var(--gold);
+    color: var(--bg);
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    padding: 16px 36px;
+    text-decoration: none;
+    transition: background 0.2s, transform 0.2s;
+    display: inline-block;
+  }
+  .btn-primary:hover { background: var(--lime); transform: translateY(-2px); }
+  .btn-outline {
+    border: 1px solid rgba(245,240,232,0.4);
+    color: var(--cream);
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    padding: 16px 36px;
+    text-decoration: none;
+    transition: border-color 0.2s, color 0.2s, transform 0.2s;
+    display: inline-block;
+  }
+  .btn-outline:hover { border-color: var(--gold); color: var(--gold); transform: translateY(-2px); }
+
+  .scroll-indicator {
+    position: absolute; bottom: 40px; left: 50%;
+    transform: translateX(-50%);
+    z-index: 2;
+    display: flex; flex-direction: column; align-items: center; gap: 8px;
+    opacity: 0;
+    animation: fadeIn 1s 1.5s ease forwards;
+  }
+  .scroll-indicator span {
+    font-family: var(--font-mono);
+    font-size: 0.62rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: rgba(245,240,232,0.4);
+  }
+  .scroll-arrow {
+    width: 1px; height: 48px;
+    background: linear-gradient(to bottom, var(--gold), transparent);
+    animation: scrollPulse 1.6s ease-in-out infinite;
+  }
+
+  /* ─── MARQUEE ─── */
+  .marquee-section {
+    border-top: 1px solid rgba(201,168,76,0.25);
+    border-bottom: 1px solid rgba(201,168,76,0.25);
+    background: var(--muted);
+    overflow: hidden;
+    padding: 18px 0;
+  }
+  .marquee-track {
+    display: flex;
+    animation: marquee 28s linear infinite;
+    white-space: nowrap;
+  }
+  .marquee-item {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gold);
+    padding: 0 32px;
+    display: flex; align-items: center; gap: 32px;
+  }
+  .marquee-dot {
+    width: 4px; height: 4px;
+    background: var(--gold);
+    border-radius: 50%;
+    display: inline-block;
+  }
+
+  /* ─── SECTION COMMONS ─── */
+  section { padding: 120px 0; }
+  .container { max-width: 1280px; margin: 0 auto; padding: 0 48px; }
+  .section-label {
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 20px;
+    display: flex; align-items: center; gap: 12px;
+  }
+  .section-label::before {
+    content: '';
+    width: 32px; height: 1px;
+    background: var(--gold);
+    display: block;
+  }
+  .section-title {
+    font-family: var(--font-display);
+    font-size: clamp(2.5rem, 5vw, 5rem);
+    font-weight: 700;
+    line-height: 1.0;
+    letter-spacing: -0.02em;
+    margin-bottom: 60px;
+  }
+  .section-title em { font-style: italic; color: var(--gold); }
+
+  /* ─── SERVICES ─── */
+  #services { background: var(--bg); }
+  .services-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2px;
+  }
+  .service-card {
+    position: relative;
+    background: var(--mid);
+    padding: 56px 40px;
+    overflow: hidden;
+    transition: transform 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+    transform-style: preserve-3d;
+  }
+  .service-card::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: linear-gradient(135deg, rgba(201,168,76,0.08) 0%, transparent 60%);
+    opacity: 0;
+    transition: opacity 0.4s;
+  }
+  .service-card:hover::before { opacity: 1; }
+  .service-card:hover { transform: translateY(-8px); }
+  .service-number {
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
+    color: var(--gold);
+    letter-spacing: 0.2em;
+    margin-bottom: 32px;
+    opacity: 0.6;
+  }
+  .service-icon {
+    font-size: 2.5rem;
+    margin-bottom: 24px;
+    display: block;
+  }
+  .service-name {
+    font-family: var(--font-display);
+    font-size: 2.2rem;
+    font-weight: 700;
+    margin-bottom: 16px;
+    line-height: 1.1;
+  }
+  .service-desc {
+    font-size: 0.9rem;
+    color: rgba(245,240,232,0.55);
+    line-height: 1.7;
+    margin-bottom: 36px;
+  }
+  .service-link {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--gold);
+    text-decoration: none;
+    display: flex; align-items: center; gap: 10px;
+    transition: gap 0.2s;
+  }
+  .service-link:hover { gap: 18px; }
+  .service-corner {
+    position: absolute; top: 24px; right: 24px;
+    width: 48px; height: 48px;
+    border-top: 1px solid rgba(201,168,76,0.25);
+    border-right: 1px solid rgba(201,168,76,0.25);
+    transition: width 0.3s, height 0.3s, border-color 0.3s;
+  }
+  .service-card:hover .service-corner {
+    width: 64px; height: 64px; border-color: var(--gold);
+  }
+
+  /* ─── STUDIO WALK ─── */
+  #studio {
+    background: var(--mid);
+    overflow: hidden;
+  }
+  .studio-inner {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: center;
+  }
+  .studio-text .section-title { margin-bottom: 24px; }
+  .studio-body {
+    font-size: 1.05rem;
+    color: rgba(245,240,232,0.6);
+    line-height: 1.8;
+    margin-bottom: 32px;
+  }
+  .studio-stats {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 24px; margin-top: 48px;
+  }
+  .studio-stat-item {
+    border-left: 2px solid var(--gold);
+    padding-left: 20px;
+  }
+  .studio-stat-num {
+    font-family: var(--font-display);
+    font-size: 2.8rem;
+    font-weight: 700;
+    color: var(--gold);
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+  .studio-stat-label {
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: rgba(245,240,232,0.4);
+  }
+  .studio-visual {
+    position: relative;
+  }
+  .studio-img-main {
+    width: 100%;
+    aspect-ratio: 3/4;
+    background: var(--muted);
+    position: relative;
+    overflow: hidden;
+  }
+  .studio-img-placeholder {
+    width: 100%; height: 100%;
+    background: linear-gradient(135deg, #1a1a1a 0%, #2c2c2c 50%, #1a1a1a 100%);
+    display: flex; align-items: center; justify-content: center;
+    flex-direction: column; gap: 12px;
+  }
+  .studio-img-placeholder span {
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: rgba(245,240,232,0.2);
+  }
+  .studio-img-accent {
+    position: absolute;
+    bottom: -24px; right: -24px;
+    width: 55%;
+    aspect-ratio: 1;
+    background: var(--muted);
+    border: 3px solid var(--bg);
+    overflow: hidden;
+  }
+  .studio-badge {
+    position: absolute;
+    top: 32px; left: -24px;
+    background: var(--gold);
+    color: var(--bg);
+    padding: 12px 20px;
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+  }
+
+  /* ─── GALLERY ─── */
+  #gallery { background: var(--bg); }
+  .gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: auto;
+    gap: 3px;
+  }
+  .gallery-item {
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+  }
+  .gallery-item:nth-child(1) { grid-column: span 2; grid-row: span 2; }
+  .gallery-item:nth-child(5) { grid-column: span 2; }
+  .gallery-placeholder {
+    width: 100%;
+    aspect-ratio: 1;
+    background: var(--mid);
+    display: flex; align-items: flex-end; padding: 20px;
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.5s ease;
+  }
+  .gallery-item:nth-child(1) .gallery-placeholder { aspect-ratio: auto; min-height: 480px; }
+  .gallery-item:nth-child(5) .gallery-placeholder { aspect-ratio: 2/1; }
+  .gallery-placeholder::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: linear-gradient(to bottom, transparent 40%, rgba(10,10,10,0.85) 100%);
+    z-index: 1;
+  }
+  .gallery-gradient {
+    position: absolute; inset: 0;
+    opacity: 0;
+    transition: opacity 0.4s;
+    background: rgba(201,168,76,0.1);
+    z-index: 0;
+  }
+  .gallery-item:hover .gallery-gradient { opacity: 1; }
+  .gallery-item:hover .gallery-placeholder { transform: scale(1.03); }
+  .gallery-tag {
+    position: relative; z-index: 2;
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--gold);
+    opacity: 0;
+    transform: translateY(8px);
+    transition: opacity 0.3s, transform 0.3s;
+  }
+  .gallery-item:hover .gallery-tag { opacity: 1; transform: translateY(0); }
+
+  /* gradient textures for gallery placeholder backgrounds */
+  .g1 { background: linear-gradient(135deg, #1c1008 0%, #2a1e10 40%, #1a1a1a 100%); }
+  .g2 { background: linear-gradient(135deg, #0d1018 0%, #1a2030 50%, #0d0d0d 100%); }
+  .g3 { background: linear-gradient(135deg, #120810 0%, #201525 50%, #0a0a0a 100%); }
+  .g4 { background: linear-gradient(45deg, #101208 0%, #1e2010 60%, #141414 100%); }
+  .g5 { background: linear-gradient(135deg, #180a0a 0%, #281010 50%, #1a0808 100%); }
+  .g6 { background: linear-gradient(135deg, #080a12 0%, #101828 50%, #0a0c14 100%); }
+  .g7 { background: linear-gradient(135deg, #0a1008 0%, #182010 50%, #0c0c0a 100%); }
+
+  .gallery-cta {
+    margin-top: 48px;
+    text-align: center;
+  }
+
+  /* ─── COUNTER ─── */
+  #counter {
+    background: var(--muted);
+    padding: 80px 0;
+  }
+  .counter-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 2px;
+  }
+  .counter-item {
+    text-align: center;
+    padding: 56px 32px;
+    background: var(--mid);
+    position: relative;
+    overflow: hidden;
+  }
+  .counter-item::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 50%; transform: translateX(-50%);
+    width: 40px; height: 2px;
+    background: var(--gold);
+    transition: width 0.4s;
+  }
+  .counter-item:hover::after { width: 80%; }
+  .counter-num {
+    font-family: var(--font-display);
+    font-size: clamp(3rem, 5vw, 5.5rem);
+    font-weight: 900;
+    color: var(--gold);
+    line-height: 1;
+    margin-bottom: 12px;
+  }
+  .counter-label {
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: rgba(245,240,232,0.4);
+  }
+  .counter-star { color: var(--lime); font-size: 1.2rem; }
+
+  /* ─── REVIEWS ─── */
+  #reviews { background: var(--bg); }
+  .reviews-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2px;
+  }
+  .review-card {
+    background: var(--mid);
+    padding: 48px 40px;
+    position: relative;
+    transition: transform 0.3s;
+  }
+  .review-card:hover { transform: translateY(-6px); }
+  .review-stars {
+    color: var(--gold);
+    font-size: 1rem;
+    letter-spacing: 3px;
+    margin-bottom: 24px;
+  }
+  .review-text {
+    font-family: var(--font-display);
+    font-size: 1.15rem;
+    font-style: italic;
+    line-height: 1.65;
+    color: var(--cream);
+    margin-bottom: 32px;
+  }
+  .review-author {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--gold);
+  }
+  .review-source {
+    font-family: var(--font-mono);
+    font-size: 0.6rem;
+    color: rgba(245,240,232,0.3);
+    letter-spacing: 0.1em;
+    margin-top: 4px;
+  }
+  .review-quote-mark {
+    position: absolute; top: 32px; right: 36px;
+    font-family: var(--font-display);
+    font-size: 6rem;
+    line-height: 1;
+    color: rgba(201,168,76,0.08);
+    font-weight: 900;
+  }
+
+  /* ─── ACADEMY ─── */
+  #academy { background: var(--mid); }
+  .academy-inner {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 100px;
+    align-items: start;
+  }
+  .academy-programs { display: flex; flex-direction: column; gap: 2px; }
+  .program-item {
+    background: var(--bg);
+    padding: 32px 36px;
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    transition: background 0.2s;
+    cursor: pointer;
+  }
+  .program-item:hover { background: rgba(201,168,76,0.06); }
+  .program-number {
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
+    color: var(--gold);
+    opacity: 0.5;
+    min-width: 28px;
+  }
+  .program-name {
+    font-family: var(--font-display);
+    font-size: 1.4rem;
+    font-weight: 700;
+  }
+  .program-desc {
+    font-size: 0.82rem;
+    color: rgba(245,240,232,0.45);
+    margin-top: 4px;
+  }
+  .program-arrow {
+    margin-left: auto;
+    color: var(--gold);
+    font-size: 1.2rem;
+    transition: transform 0.2s;
+  }
+  .program-item:hover .program-arrow { transform: translateX(6px); }
+  .academy-form-wrap {
+    background: var(--bg);
+    padding: 48px;
+  }
+  .form-title {
+    font-family: var(--font-display);
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 8px;
+  }
+  .form-subtitle {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    color: rgba(245,240,232,0.35);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-bottom: 36px;
+  }
+  .form-group { margin-bottom: 20px; }
+  .form-group label {
+    display: block;
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: rgba(245,240,232,0.4);
+    margin-bottom: 8px;
+  }
+  .form-group input,
+  .form-group textarea,
+  .form-group select {
+    width: 100%;
+    background: var(--mid);
+    border: 1px solid rgba(245,240,232,0.1);
+    color: var(--cream);
+    font-family: var(--font-body);
+    font-size: 0.9rem;
+    padding: 14px 16px;
+    outline: none;
+    transition: border-color 0.2s;
+    appearance: none;
+    cursor: none;
+  }
+  .form-group input:focus,
+  .form-group textarea:focus,
+  .form-group select:focus {
+    border-color: var(--gold);
+  }
+  .form-group textarea { height: 100px; resize: none; }
+  .form-submit {
+    width: 100%;
+    background: var(--gold);
+    color: var(--bg);
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    padding: 16px;
+    border: none;
+    cursor: none;
+    transition: background 0.2s;
+    margin-top: 8px;
+  }
+  .form-submit:hover { background: var(--lime); }
+
+  /* ─── BOOKING CTA ─── */
+  #booking-cta {
+    position: relative;
+    overflow: hidden;
+    padding: 140px 0;
+    text-align: center;
+  }
+  .booking-bg {
+    position: absolute; inset: 0;
+    background: 
+      radial-gradient(ellipse at 20% 50%, rgba(201,168,76,0.08) 0%, transparent 60%),
+      radial-gradient(ellipse at 80% 50%, rgba(212,255,87,0.04) 0%, transparent 60%),
+      var(--muted);
+  }
+  .booking-noise {
+    position: absolute; inset: 0;
+    opacity: 0.03;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+    background-size: 200px;
+  }
+  .booking-content { position: relative; z-index: 1; }
+  .booking-headline {
+    font-family: var(--font-display);
+    font-size: clamp(3rem, 7vw, 7rem);
+    font-weight: 900;
+    line-height: 0.95;
+    letter-spacing: -0.03em;
+    margin-bottom: 48px;
+  }
+  .booking-headline .outline {
+    -webkit-text-stroke: 1.5px var(--cream);
+    color: transparent;
+  }
+  .booking-headline .gold { color: var(--gold); }
+
+  /* ─── TEAM PREVIEW ─── */
+  #team { background: var(--bg); }
+  .team-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 2px;
+  }
+  .team-card {
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+  }
+  .team-photo {
+    aspect-ratio: 2/3;
+    position: relative;
+    overflow: hidden;
+  }
+  .team-photo-inner {
+    width: 100%; height: 100%;
+    transition: transform 0.5s ease;
+    display: flex; align-items: flex-end;
+  }
+  .team-card:hover .team-photo-inner { transform: scale(1.05); }
+  .tp-1 { background: linear-gradient(160deg, #1a1208 0%, #2e2010 60%, #181818 100%); }
+  .tp-2 { background: linear-gradient(160deg, #080c18 0%, #121e30 60%, #0a0e18 100%); }
+  .tp-3 { background: linear-gradient(160deg, #100818 0%, #201030 60%, #0e0a14 100%); }
+  .tp-4 { background: linear-gradient(160deg, #081208 0%, #102010 60%, #0a0e0a 100%); }
+  .team-photo::after {
+    content: '';
+    position: absolute; inset: 0;
+    background: linear-gradient(to top, rgba(10,10,10,0.95) 0%, rgba(10,10,10,0.2) 50%, transparent 100%);
+  }
+  .team-info {
+    position: absolute; bottom: 0; left: 0; right: 0;
+    padding: 28px 24px;
+    z-index: 1;
+  }
+  .team-name {
+    font-family: var(--font-display);
+    font-size: 1.3rem;
+    font-weight: 700;
+    margin-bottom: 4px;
+  }
+  .team-role {
+    font-family: var(--font-mono);
+    font-size: 0.62rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--gold);
+  }
+  .team-quote {
+    font-size: 0.8rem;
+    color: rgba(245,240,232,0.5);
+    font-style: italic;
+    margin-top: 8px;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.4s ease, opacity 0.4s;
+    opacity: 0;
+  }
+  .team-card:hover .team-quote { max-height: 60px; opacity: 1; }
+
+  /* ─── FOOTER ─── */
+  footer {
+    background: #050505;
+    border-top: 1px solid rgba(201,168,76,0.15);
+    padding: 80px 0 40px;
+  }
+  .footer-top {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr;
+    gap: 60px;
+    margin-bottom: 60px;
+  }
+  .footer-brand .footer-logo {
+    font-family: var(--font-display);
+    font-size: 1.8rem;
+    font-style: italic;
+    color: var(--cream);
+    margin-bottom: 16px;
+  }
+  .footer-brand .footer-logo span { color: var(--gold); }
+  .footer-brand p {
+    font-size: 0.88rem;
+    color: rgba(245,240,232,0.4);
+    line-height: 1.7;
+    margin-bottom: 24px;
+  }
+  .social-links { display: flex; gap: 12px; }
+  .social-link {
+    width: 40px; height: 40px;
+    background: var(--muted);
+    display: flex; align-items: center; justify-content: center;
+    color: rgba(245,240,232,0.5);
+    text-decoration: none;
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
+    letter-spacing: 0.1em;
+    transition: background 0.2s, color 0.2s;
+  }
+  .social-link:hover { background: var(--gold); color: var(--bg); }
+  .footer-col h4 {
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 20px;
+  }
+  .footer-col ul { list-style: none; }
+  .footer-col ul li {
+    margin-bottom: 10px;
+  }
+  .footer-col ul li a {
+    font-size: 0.88rem;
+    color: rgba(245,240,232,0.45);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+  .footer-col ul li a:hover { color: var(--cream); }
+  .footer-col address {
+    font-style: normal;
+    font-size: 0.88rem;
+    color: rgba(245,240,232,0.45);
+    line-height: 1.9;
+  }
+  .footer-col address a {
+    color: var(--gold);
+    text-decoration: none;
+  }
+  .footer-newsletter {
+    display: flex; gap: 0;
+    margin-top: 16px;
+  }
+  .footer-newsletter input {
+    flex: 1;
+    background: var(--muted);
+    border: 1px solid rgba(245,240,232,0.08);
+    border-right: none;
+    color: var(--cream);
+    font-family: var(--font-body);
+    font-size: 0.82rem;
+    padding: 11px 14px;
+    outline: none;
+    cursor: none;
+  }
+  .footer-newsletter button {
+    background: var(--gold);
+    color: var(--bg);
+    border: none;
+    font-family: var(--font-mono);
+    font-size: 0.62rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 11px 16px;
+    cursor: none;
+    transition: background 0.2s;
+  }
+  .footer-newsletter button:hover { background: var(--lime); }
+  .footer-bottom {
+    border-top: 1px solid rgba(245,240,232,0.06);
+    padding-top: 36px;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .footer-bottom p {
+    font-family: var(--font-mono);
+    font-size: 0.62rem;
+    letter-spacing: 0.1em;
+    color: rgba(245,240,232,0.2);
+  }
+
+  /* ─── REVEAL ANIMATIONS ─── */
+  .reveal {
+    opacity: 0;
+    transform: translateY(40px);
+    transition: opacity 0.8s ease, transform 0.8s ease;
+  }
+  .reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  .reveal-left {
+    opacity: 0;
+    transform: translateX(-40px);
+    transition: opacity 0.8s ease, transform 0.8s ease;
+  }
+  .reveal-left.visible { opacity: 1; transform: translateX(0); }
+  .reveal-right {
+    opacity: 0;
+    transform: translateX(40px);
+    transition: opacity 0.8s ease, transform 0.8s ease;
+  }
+  .reveal-right.visible { opacity: 1; transform: translateX(0); }
+
+  /* ─── KEYFRAMES ─── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  @keyframes marquee {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+  @keyframes scrollPulse {
+    0%, 100% { transform: scaleY(1); opacity: 1; }
+    50% { transform: scaleY(0.5); opacity: 0.4; }
+  }
+  @keyframes floatParticle {
+    0% { transform: translate(0, 0) scale(1); opacity: 0.8; }
+    33% { transform: translate(var(--dx1), var(--dy1)) scale(0.9); opacity: 0.6; }
+    66% { transform: translate(var(--dx2), var(--dy2)) scale(1.1); opacity: 0.9; }
+    100% { transform: translate(0, 0) scale(1); opacity: 0.8; }
+  }
+
+  /* ─── HOURS GRID ─── */
+  .hours-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 2px;
+    margin-top: 24px;
+  }
+  .hours-day {
+    background: var(--mid);
+    padding: 20px 12px;
+    text-align: center;
+  }
+  .hours-day.closed { opacity: 0.4; }
+  .hours-day.today { background: rgba(201,168,76,0.12); border-top: 2px solid var(--gold); }
+  .hours-day-name {
+    font-family: var(--font-mono);
+    font-size: 0.6rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: rgba(245,240,232,0.4);
+    margin-bottom: 8px;
+  }
+  .hours-time {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--cream);
+    line-height: 1.4;
+  }
+
+  /* ─── WHATSAPP FLOAT ─── */
+  .whatsapp-float {
+    position: fixed;
+    bottom: 32px; right: 32px;
+    z-index: 200;
+    background: #25D366;
+    color: white;
+    width: 56px; height: 56px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    text-decoration: none;
+    font-size: 1.5rem;
+    box-shadow: 0 8px 32px rgba(37,211,102,0.3);
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .whatsapp-float:hover { transform: scale(1.1); box-shadow: 0 12px 40px rgba(37,211,102,0.5); }
+
+  /* ─── MOBILE NAV (hamburger hint) ─── */
+  .nav-mobile-toggle { display: none; }
+
+  @media (max-width: 1024px) {
+    .container { padding: 0 24px; }
+    .services-grid { grid-template-columns: 1fr; gap: 2px; }
+    .studio-inner { grid-template-columns: 1fr; gap: 48px; }
+    .studio-visual { display: none; }
+    .gallery-grid { grid-template-columns: repeat(2, 1fr); }
+    .gallery-item:nth-child(1) { grid-column: span 2; }
+    .gallery-item:nth-child(5) { grid-column: span 2; }
+    .counter-grid { grid-template-columns: repeat(2, 1fr); }
+    .reviews-grid { grid-template-columns: 1fr; }
+    .academy-inner { grid-template-columns: 1fr; gap: 48px; }
+    .team-grid { grid-template-columns: repeat(2, 1fr); }
+    .footer-top { grid-template-columns: 1fr 1fr; gap: 40px; }
+    nav { padding: 20px 24px; }
+    nav.scrolled { padding: 14px 24px; }
+    .nav-links { display: none; }
+    .nav-mobile-toggle { display: flex; }
+  }
+  @media (max-width: 600px) {
+    .hero-title { font-size: clamp(2.8rem, 12vw, 5rem); }
+    .gallery-grid { grid-template-columns: 1fr; }
+    .gallery-item:nth-child(1),
+    .gallery-item:nth-child(5) { grid-column: span 1; }
+    .counter-grid { grid-template-columns: repeat(2, 1fr); }
+    .team-grid { grid-template-columns: 1fr; }
+    .footer-top { grid-template-columns: 1fr; }
+    .hours-grid { grid-template-columns: repeat(4, 1fr); }
+    body { cursor: auto; }
+    #cursor-dot, #cursor-ring { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<!-- CURSOR -->
+<div id="cursor-dot"></div>
+<div id="cursor-ring"></div>
+
+<!-- WHATSAPP FLOAT -->
+<a href="https://wa.me/49781970267" class="whatsapp-float" title="WhatsApp" target="_blank">
+  <svg width="26" height="26" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
+</a>
+
+<!-- NAV -->
+<nav id="navbar">
+  <a href="#" class="nav-logo">Friseur <span>Akademie</span></a>
+  <ul class="nav-links">
+    <li><a href="#services">Leistungen</a></li>
+    <li><a href="#gallery">Galerie</a></li>
+    <li><a href="#academy">Akademie</a></li>
+    <li><a href="#team">Team</a></li>
+    <li><a href="#contact">Kontakt</a></li>
+  </ul>
+  <a href="#booking-cta" class="nav-cta">Termin buchen</a>
+  <button class="nav-mobile-toggle" onclick="toggleMobileMenu()" style="background:none;border:none;color:var(--cream);cursor:pointer;font-size:1.5rem;">☰</button>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <canvas id="hero-canvas"></canvas>
+  <div class="hero-overlay"></div>
+  <div class="hero-content">
+    <div class="hero-label">✦ Friseur Akademie · Offenburg · Seit 2005</div>
+    <h1 class="hero-title">
+      Dein Stil.<br>
+      <em>Deine</em><br>
+      <span class="line2">Kunst.</span>
+    </h1>
+    <p class="hero-sub">Premium Haircare & professionelle Ausbildung im Herzen Offenburgs</p>
+    <div class="hero-btns">
+      <a href="#booking-cta" class="btn-primary">Termin buchen</a>
+      <a href="#gallery" class="btn-outline">Galerie entdecken</a>
+    </div>
+  </div>
+  <div class="scroll-indicator">
+    <span>Scroll</span>
+    <div class="scroll-arrow"></div>
+  </div>
+</section>
+
+<!-- MARQUEE -->
+<div class="marquee-section">
+  <div class="marquee-track">
+    <!-- duplicated for seamless loop -->
+    <div class="marquee-item">SCHNITT <span class="marquee-dot"></span></div>
+    <div class="marquee-item">FARBE <span class="marquee-dot"></span></div>
+    <div class="marquee-item">BALAYAGE <span class="marquee-dot"></span></div>
+    <div class="marquee-item">TRAINING <span class="marquee-dot"></span></div>
+    <div class="marquee-item">OFFENBURG <span class="marquee-dot"></span></div>
+    <div class="marquee-item">SEIT 2005 <span class="marquee-dot"></span></div>
+    <div class="marquee-item">PROFESSIONALITÄT <span class="marquee-dot"></span></div>
+    <div class="marquee-item">MEISTERKURS <span class="marquee-dot"></span></div>
+    <div class="marquee-item">SCHNITT <span class="marquee-dot"></span></div>
+    <div class="marquee-item">FARBE <span class="marquee-dot"></span></div>
+    <div class="marquee-item">BALAYAGE <span class="marquee-dot"></span></div>
+    <div class="marquee-item">TRAINING <span class="marquee-dot"></span></div>
+    <div class="marquee-item">OFFENBURG <span class="marquee-dot"></span></div>
+    <div class="marquee-item">SEIT 2005 <span class="marquee-dot"></span></div>
+    <div class="marquee-item">PROFESSIONALITÄT <span class="marquee-dot"></span></div>
+    <div class="marquee-item">MEISTERKURS <span class="marquee-dot"></span></div>
+  </div>
+</div>
+
+<!-- SERVICES -->
+<section id="services">
+  <div class="container">
+    <div class="section-label">Leistungen</div>
+    <h2 class="section-title reveal">Was wir <em>können.</em></h2>
+    <div class="services-grid">
+      <div class="service-card reveal">
+        <div class="service-corner"></div>
+        <div class="service-number">01</div>
+        <span class="service-icon">✂</span>
+        <h3 class="service-name">Damen & Herren</h3>
+        <p class="service-desc">Von klassischen Schnitten bis avantgardistischen Styles — wir kreieren Looks, die zu dir passen. Präzision trifft Kreativität.</p>
+        <a href="#" class="service-link">Mehr erfahren →</a>
+      </div>
+      <div class="service-card reveal" style="transition-delay:0.1s">
+        <div class="service-corner"></div>
+        <div class="service-number">02</div>
+        <span class="service-icon">✦</span>
+        <h3 class="service-name">Farbe & Balayage</h3>
+        <p class="service-desc">Natürliche Highlights, kräftige Töne, komplexe Farbverläufe. Unsere Coloristen sind Künstler an der Farbe.</p>
+        <a href="#" class="service-link">Mehr erfahren →</a>
+      </div>
+      <div class="service-card reveal" style="transition-delay:0.2s">
+        <div class="service-corner"></div>
+        <div class="service-number">03</div>
+        <span class="service-icon">◈</span>
+        <h3 class="service-name">Akademie</h3>
+        <p class="service-desc">Werde der nächste Meister. Professionelle Ausbildung, Weiterbildungskurse und Brand-Workshops unter einem Dach.</p>
+        <a href="#academy" class="service-link">Zur Akademie →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- STUDIO -->
+<section id="studio">
+  <div class="container">
+    <div class="studio-inner">
+      <div class="studio-text reveal-left">
+        <div class="section-label">Das Studio</div>
+        <h2 class="section-title">Modern aus&shy;gestattet.<br><em>Handwerk&shy;lich perfekt.</em></h2>
+        <p class="studio-body">Unser Salon in der Ritterstraße 4 verbindet professionelle Infrastruktur mit einer Atmosphäre, die Kreativität weckt. Modernste Technik trifft auf handwerkliche Perfektion — hier entstehen Looks, die begeistern.</p>
+        <a href="#booking-cta" class="btn-primary">Jetzt buchen</a>
+        <div class="studio-stats">
+          <div class="studio-stat-item">
+            <div class="studio-stat-num counter-animate" data-target="1200">0</div>
+            <div class="studio-stat-label">Zufriedene Kunden</div>
+          </div>
+          <div class="studio-stat-item">
+            <div class="studio-stat-num counter-animate" data-target="20">0</div>
+            <div class="studio-stat-label">Jahre Erfahrung</div>
+          </div>
+          <div class="studio-stat-item">
+            <div class="studio-stat-num">5★</div>
+            <div class="studio-stat-label">Google Bewertung</div>
+          </div>
+          <div class="studio-stat-item">
+            <div class="studio-stat-num counter-animate" data-target="8">0</div>
+            <div class="studio-stat-label">Fachkräfte im Team</div>
+          </div>
+        </div>
+      </div>
+      <div class="studio-visual reveal-right">
+        <div class="studio-img-main">
+          <div class="studio-img-placeholder g1">
+            <span>📸</span>
+            <span>Salon Interior</span>
+          </div>
+        </div>
+        <div class="studio-img-accent">
+          <div class="studio-img-placeholder g2">
+            <span>✂</span>
+            <span>Cutting Station</span>
+          </div>
+        </div>
+        <div class="studio-badge">Offenburg · Est. 2005</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- GALLERY -->
+<section id="gallery">
+  <div class="container">
+    <div class="section-label">Portfolio</div>
+    <h2 class="section-title reveal">Unsere <em>Arbeiten.</em></h2>
+    <div class="gallery-grid">
+      <div class="gallery-item">
+        <div class="gallery-placeholder g1">
+          <div class="gallery-gradient"></div>
+          <span class="gallery-tag">#Balayage · #Damen</span>
+        </div>
+      </div>
+      <div class="gallery-item">
+        <div class="gallery-placeholder g2">
+          <div class="gallery-gradient"></div>
+          <span class="gallery-tag">#Schnitt · #Herren</span>
+        </div>
+      </div>
+      <div class="gallery-item">
+        <div class="gallery-placeholder g3">
+          <div class="gallery-gradient"></div>
+          <span class="gallery-tag">#Color · #Highlights</span>
+        </div>
+      </div>
+      <div class="gallery-item">
+        <div class="gallery-placeholder g4">
+          <div class="gallery-gradient"></div>
+          <span class="gallery-tag">#Bridal · #Styling</span>
+        </div>
+      </div>
+      <div class="gallery-item">
+        <div class="gallery-placeholder g5">
+          <div class="gallery-gradient"></div>
+          <span class="gallery-tag">#Transformation · #Farbe</span>
+        </div>
+      </div>
+      <div class="gallery-item">
+        <div class="gallery-placeholder g6">
+          <div class="gallery-gradient"></div>
+          <span class="gallery-tag">#Cut · #Modern</span>
+        </div>
+      </div>
+      <div class="gallery-item">
+        <div class="gallery-placeholder g7">
+          <div class="gallery-gradient"></div>
+          <span class="gallery-tag">#Treatment · #Care</span>
+        </div>
+      </div>
+    </div>
+    <div class="gallery-cta reveal">
+      <a href="#" class="btn-outline">Alle Arbeiten ansehen →</a>
+    </div>
+  </div>
+</section>
+
+<!-- COUNTER SECTION -->
+<section id="counter">
+  <div class="container">
+    <div class="counter-grid">
+      <div class="counter-item reveal">
+        <div class="counter-num"><span class="counter-animate" data-target="1200">0</span>+</div>
+        <div class="counter-label">Zufriedene Kunden</div>
+      </div>
+      <div class="counter-item reveal" style="transition-delay:0.1s">
+        <div class="counter-num"><span class="counter-animate" data-target="20">0</span>+</div>
+        <div class="counter-label">Jahre Erfahrung</div>
+      </div>
+      <div class="counter-item reveal" style="transition-delay:0.2s">
+        <div class="counter-num">5 <span class="counter-star">★</span></div>
+        <div class="counter-label">Google Bewertungen</div>
+      </div>
+      <div class="counter-item reveal" style="transition-delay:0.3s">
+        <div class="counter-num"><span class="counter-animate" data-target="150">0</span>+</div>
+        <div class="counter-label">Absolventen</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- REVIEWS -->
+<section id="reviews">
+  <div class="container">
+    <div class="section-label">Stimmen</div>
+    <h2 class="section-title reveal">Was Kunden <em>sagen.</em></h2>
+    <div class="reviews-grid">
+      <div class="review-card reveal">
+        <div class="review-quote-mark">"</div>
+        <div class="review-stars">★★★★★</div>
+        <p class="review-text">Absolut begeistert! Das Team hat meine Vorstellungen perfekt umgesetzt. Die Atmosphäre ist einzigartig — modern, professionell und entspannt.</p>
+        <div class="review-author">Sarah M.</div>
+        <div class="review-source">via Google · 2024</div>
+      </div>
+      <div class="review-card reveal" style="transition-delay:0.1s">
+        <div class="review-quote-mark">"</div>
+        <div class="review-stars">★★★★★</div>
+        <p class="review-text">Der beste Friseur in Offenburg, ohne Zweifel. Mein Balayage sieht fantastisch aus und hält perfekt. Ich komme immer wieder hierher.</p>
+        <div class="review-author">Lena K.</div>
+        <div class="review-source">via Google · 2024</div>
+      </div>
+      <div class="review-card reveal" style="transition-delay:0.2s">
+        <div class="review-quote-mark">"</div>
+        <div class="review-stars">★★★★★</div>
+        <p class="review-text">Die Akademie hat meine Karriere verändert. Professionelle Ausbildung, top Ausstattung und ein Team das wirklich für die Kunst brennt.</p>
+        <div class="review-author">Tobias R.</div>
+        <div class="review-source">via Google · 2023</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ACADEMY -->
+<section id="academy">
+  <div class="container">
+    <div class="academy-inner">
+      <div class="reveal-left">
+        <div class="section-label">Akademie</div>
+        <h2 class="section-title">Werde der nächste <em>Meister.</em></h2>
+        <p style="color:rgba(245,240,232,0.55);font-size:0.95rem;line-height:1.8;margin-bottom:40px;">
+          Die Friseur Akademie Offenburg ist mehr als ein Salon — sie ist eine Schule für zukünftige Profis. Ob Ausbildung, Meisterkurs oder Weiterbildung: Hier wirst du gemacht.
+        </p>
+        <div class="academy-programs">
+          <div class="program-item">
+            <span class="program-number">01</span>
+            <div>
+              <div class="program-name">Ausbildung</div>
+              <div class="program-desc">3-jährige Berufsausbildung zum Friseur / zur Friseurin</div>
+            </div>
+            <span class="program-arrow">→</span>
+          </div>
+          <div class="program-item">
+            <span class="program-number">02</span>
+            <div>
+              <div class="program-name">Meisterkurs</div>
+              <div class="program-desc">Vorbereitung auf die Meisterprüfung</div>
+            </div>
+            <span class="program-arrow">→</span>
+          </div>
+          <div class="program-item">
+            <span class="program-number">03</span>
+            <div>
+              <div class="program-name">Weiterbildung</div>
+              <div class="program-desc">Coloristik, Balayage, Styling-Techniken & mehr</div>
+            </div>
+            <span class="program-arrow">→</span>
+          </div>
+          <div class="program-item">
+            <span class="program-number">04</span>
+            <div>
+              <div class="program-name">Brand Workshops</div>
+              <div class="program-desc">Zusammenarbeit mit renommierten Marken</div>
+            </div>
+            <span class="program-arrow">→</span>
+          </div>
+        </div>
+      </div>
+      <div class="reveal-right">
+        <div class="academy-form-wrap">
+          <div class="form-title">Jetzt bewerben</div>
+          <div class="form-subtitle">Deine Karriere beginnt hier</div>
+          <div class="form-group">
+            <label>Dein Name</label>
+            <input type="text" placeholder="Max Mustermann">
+          </div>
+          <div class="form-group">
+            <label>E-Mail Adresse</label>
+            <input type="email" placeholder="max@example.de">
+          </div>
+          <div class="form-group">
+            <label>Kursinteresse</label>
+            <select>
+              <option value="">Kurs auswählen...</option>
+              <option>Ausbildung</option>
+              <option>Meisterkurs</option>
+              <option>Weiterbildung</option>
+              <option>Brand Workshop</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Nachricht</label>
+            <textarea placeholder="Erzähl uns von dir..."></textarea>
+          </div>
+          <button class="form-submit">Bewerbung absenden →</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TEAM -->
+<section id="team">
+  <div class="container">
+    <div class="section-label">Das Team</div>
+    <h2 class="section-title reveal">Unsere <em>Meister.</em></h2>
+    <div class="team-grid">
+      <div class="team-card reveal">
+        <div class="team-photo">
+          <div class="team-photo-inner tp-1"></div>
+          <div class="team-info">
+            <div class="team-name">Yasmin K.</div>
+            <div class="team-role">Creative Director</div>
+            <div class="team-quote">"Haar ist der einzige Schmuck, den jeder trägt."</div>
+          </div>
+        </div>
+      </div>
+      <div class="team-card reveal" style="transition-delay:0.1s">
+        <div class="team-photo">
+          <div class="team-photo-inner tp-2"></div>
+          <div class="team-info">
+            <div class="team-name">Marco B.</div>
+            <div class="team-role">Color Spezialist</div>
+            <div class="team-quote">"Farbe ist Emotion. Ich male mit Haarfarbe."</div>
+          </div>
+        </div>
+      </div>
+      <div class="team-card reveal" style="transition-delay:0.2s">
+        <div class="team-photo">
+          <div class="team-photo-inner tp-3"></div>
+          <div class="team-info">
+            <div class="team-name">Sara P.</div>
+            <div class="team-role">Styling Expertin</div>
+            <div class="team-quote">"Jeder verdient einen Look, der ihn strahlen lässt."</div>
+          </div>
+        </div>
+      </div>
+      <div class="team-card reveal" style="transition-delay:0.3s">
+        <div class="team-photo">
+          <div class="team-photo-inner tp-4"></div>
+          <div class="team-info">
+            <div class="team-name">David R.</div>
+            <div class="team-role">Akademie Leiter</div>
+            <div class="team-quote">"Wissen weitergeben ist die schönste Arbeit."</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- BOOKING CTA -->
+<section id="booking-cta">
+  <div class="booking-bg"></div>
+  <div class="booking-noise"></div>
+  <div class="booking-content container" style="text-align:center">
+    <div class="section-label" style="justify-content:center;margin-bottom:24px;">Bereit?</div>
+    <h2 class="booking-headline reveal">
+      Bereit für<br>
+      <span class="outline">deinen</span><br>
+      <span class="gold">Look?</span>
+    </h2>
+    <p style="color:rgba(245,240,232,0.5);font-size:1rem;margin-bottom:48px;font-family:var(--font-mono);letter-spacing:0.05em;">
+      Buche deinen Termin online — schnell, einfach, jederzeit.
+    </p>
+    <div style="display:flex;gap:16px;justify-content:center;flex-wrap:wrap;" class="reveal">
+      <a href="tel:+497819702676" class="btn-outline" style="border-color:rgba(245,240,232,0.3)">📞 +49 781 9702676</a>
+      <a href="#" class="btn-primary" style="font-size:0.85rem;padding:18px 48px;">Online Termin buchen →</a>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT / FOOTER -->
+<section id="contact" style="background:var(--mid);padding:80px 0;">
+  <div class="container">
+    <div class="section-label">Öffnungszeiten</div>
+    <h2 class="section-title reveal" style="margin-bottom:32px;">Wann wir <em>da sind.</em></h2>
+    <div class="hours-grid reveal">
+      <div class="hours-day closed">
+        <div class="hours-day-name">So</div>
+        <div class="hours-time" style="color:rgba(245,240,232,0.25)">Geschl.</div>
+      </div>
+      <div class="hours-day">
+        <div class="hours-day-name">Mo</div>
+        <div class="hours-time">9:30–<br>18:00</div>
+      </div>
+      <div class="hours-day">
+        <div class="hours-day-name">Di</div>
+        <div class="hours-time">9:30–<br>18:00</div>
+      </div>
+      <div class="hours-day">
+        <div class="hours-day-name">Mi</div>
+        <div class="hours-time">9:30–<br>18:00</div>
+      </div>
+      <div class="hours-day">
+        <div class="hours-day-name">Do</div>
+        <div class="hours-time">9:30–<br>20:00★</div>
+      </div>
+      <div class="hours-day">
+        <div class="hours-day-name">Fr</div>
+        <div class="hours-time">9:30–<br>18:00</div>
+      </div>
+      <div class="hours-day">
+        <div class="hours-day-name">Sa</div>
+        <div class="hours-time">8:00–<br>16:00</div>
+      </div>
+    </div>
+    <p style="font-family:var(--font-mono);font-size:0.62rem;color:rgba(245,240,232,0.3);letter-spacing:0.12em;margin-top:12px;">★ Do bis 20:00 nur nach Vereinbarung</p>
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <div class="footer-logo">Friseur <span>Akademie</span></div>
+        <p>Premium Haircare & professionelle Ausbildung. Im Herzen von Offenburg seit 2005.</p>
+        <div class="social-links">
+          <a href="#" class="social-link" title="Instagram">IG</a>
+          <a href="#" class="social-link" title="TikTok">TT</a>
+          <a href="#" class="social-link" title="Facebook">FB</a>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h4>Navigation</h4>
+        <ul>
+          <li><a href="#services">Leistungen</a></li>
+          <li><a href="#gallery">Galerie</a></li>
+          <li><a href="#academy">Akademie</a></li>
+          <li><a href="#team">Team</a></li>
+          <li><a href="#booking-cta">Termin buchen</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Adresse & Kontakt</h4>
+        <address>
+          Ritterstraße 4<br>
+          77652 Offenburg<br><br>
+          <a href="tel:+497819702676">+49 781 9702676</a><br>
+          <a href="mailto:info@friseur-akademie-og.de">info@friseur-akademie-og.de</a>
+        </address>
+      </div>
+      <div class="footer-col">
+        <h4>Newsletter</h4>
+        <p style="font-size:0.82rem;color:rgba(245,240,232,0.4);line-height:1.6;margin-bottom:4px;">Trends direkt in deine Inbox</p>
+        <div class="footer-newsletter">
+          <input type="email" placeholder="deine@email.de">
+          <button>→</button>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2025 Friseur Akademie Offenburg. Alle Rechte vorbehalten.</p>
+      <p>Datenschutz · Impressum</p>
+    </div>
+  </div>
+</footer>
+
+<script>
+// ─── CUSTOM CURSOR ───
+const dot = document.getElementById('cursor-dot');
+const ring = document.getElementById('cursor-ring');
+let mx = 0, my = 0, rx = 0, ry = 0;
+
+document.addEventListener('mousemove', e => {
+  mx = e.clientX; my = e.clientY;
+  dot.style.left = mx + 'px';
+  dot.style.top = my + 'px';
+});
+function animateRing() {
+  rx += (mx - rx) * 0.12;
+  ry += (my - ry) * 0.12;
+  ring.style.left = rx + 'px';
+  ring.style.top = ry + 'px';
+  requestAnimationFrame(animateRing);
+}
+animateRing();
+
+document.querySelectorAll('a, button, .service-card, .gallery-item, .team-card, .program-item').forEach(el => {
+  el.addEventListener('mouseenter', () => document.body.classList.add('cursor-hover'));
+  el.addEventListener('mouseleave', () => document.body.classList.remove('cursor-hover'));
+});
+
+// ─── NAV SCROLL ───
+const navbar = document.getElementById('navbar');
+window.addEventListener('scroll', () => {
+  navbar.classList.toggle('scrolled', window.scrollY > 60);
+});
+
+// ─── HERO PARTICLE CANVAS ───
+(function() {
+  const canvas = document.getElementById('hero-canvas');
+  const ctx = canvas.getContext('2d');
+  let W, H, particles = [], mouse = { x: -9999, y: -9999 };
+  const N = 120;
+
+  function resize() {
+    W = canvas.width = canvas.offsetWidth;
+    H = canvas.height = canvas.offsetHeight;
+  }
+  resize();
+  window.addEventListener('resize', resize);
+
+  document.addEventListener('mousemove', e => {
+    const r = canvas.getBoundingClientRect();
+    mouse.x = e.clientX - r.left;
+    mouse.y = e.clientY - r.top;
+  });
+
+  class Particle {
+    constructor() { this.reset(true); }
+    reset(init) {
+      this.x = Math.random() * W;
+      this.y = init ? Math.random() * H : (Math.random() < 0.5 ? -20 : H + 20);
+      this.oy = this.y;
+      this.ox = this.x;
+      this.vx = (Math.random() - 0.5) * 0.4;
+      this.vy = (Math.random() - 0.5) * 0.5;
+      this.r = Math.random() * 1.8 + 0.4;
+      const colors = ['#C9A84C', '#F5F0E8', '#D4FF57', '#C9A84C', '#C9A84C'];
+      this.color = colors[Math.floor(Math.random() * colors.length)];
+      this.alpha = Math.random() * 0.6 + 0.2;
+      this.life = 1; this.decay = Math.random() * 0.003 + 0.001;
+      this.angle = Math.random() * Math.PI * 2;
+      this.wave = Math.random() * 0.02 + 0.005;
+    }
+    update() {
+      this.angle += this.wave;
+      this.x += this.vx + Math.sin(this.angle) * 0.4;
+      this.y += this.vy + Math.cos(this.angle * 0.7) * 0.3;
+
+      // mouse repulsion
+      const dx = this.x - mouse.x, dy = this.y - mouse.y;
+      const dist = Math.sqrt(dx*dx + dy*dy);
+      if (dist < 120) {
+        const force = (120 - dist) / 120;
+        this.x += (dx / dist) * force * 2.5;
+        this.y += (dy / dist) * force * 2.5;
+      }
+
+      this.life -= this.decay;
+      if (this.life <= 0 || this.x < -50 || this.x > W+50 || this.y < -50 || this.y > H+50) {
+        this.reset(false);
+      }
+    }
+    draw() {
+      ctx.save();
+      ctx.globalAlpha = this.alpha * this.life;
+      ctx.fillStyle = this.color;
+      ctx.beginPath();
+      ctx.arc(this.x, this.y, this.r, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.restore();
+    }
+  }
+
+  for (let i = 0; i < N; i++) particles.push(new Particle());
+
+  // draw hair strand lines between close particles
+  function drawLines() {
+    for (let i = 0; i < particles.length; i++) {
+      for (let j = i+1; j < particles.length; j++) {
+        const dx = particles[i].x - particles[j].x;
+        const dy = particles[i].y - particles[j].y;
+        const d = Math.sqrt(dx*dx + dy*dy);
+        if (d < 80) {
+          ctx.save();
+          ctx.globalAlpha = (1 - d/80) * 0.12 * particles[i].life;
+          ctx.strokeStyle = '#C9A84C';
+          ctx.lineWidth = 0.5;
+          ctx.beginPath();
+          ctx.moveTo(particles[i].x, particles[i].y);
+          ctx.lineTo(particles[j].x, particles[j].y);
+          ctx.stroke();
+          ctx.restore();
+        }
+      }
+    }
+  }
+
+  function loop() {
+    ctx.clearRect(0, 0, W, H);
+    drawLines();
+    particles.forEach(p => { p.update(); p.draw(); });
+    requestAnimationFrame(loop);
+  }
+  loop();
+})();
+
+// ─── REVEAL ON SCROLL ───
+const reveals = document.querySelectorAll('.reveal, .reveal-left, .reveal-right');
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.classList.add('visible');
+    }
+  });
+}, { threshold: 0.12 });
+reveals.forEach(el => observer.observe(el));
+
+// ─── COUNTER ANIMATION ───
+const counters = document.querySelectorAll('.counter-animate');
+const counterObserver = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting && !e.target.dataset.done) {
+      e.target.dataset.done = '1';
+      const target = parseInt(e.target.dataset.target);
+      const duration = 1800;
+      const start = performance.now();
+      function tick(now) {
+        const t = Math.min((now - start) / duration, 1);
+        const ease = 1 - Math.pow(1 - t, 3);
+        e.target.textContent = Math.floor(ease * target).toLocaleString('de-DE');
+        if (t < 1) requestAnimationFrame(tick);
+      }
+      requestAnimationFrame(tick);
+    }
+  });
+}, { threshold: 0.3 });
+counters.forEach(el => counterObserver.observe(el));
+
+// ─── SERVICE CARD 3D TILT ───
+document.querySelectorAll('.service-card').forEach(card => {
+  card.addEventListener('mousemove', e => {
+    const r = card.getBoundingClientRect();
+    const x = (e.clientX - r.left) / r.width - 0.5;
+    const y = (e.clientY - r.top) / r.height - 0.5;
+    card.style.transform = `translateY(-8px) perspective(800px) rotateX(${-y*8}deg) rotateY(${x*8}deg)`;
+  });
+  card.addEventListener('mouseleave', () => {
+    card.style.transform = '';
+  });
+});
+
+// ─── MOBILE MENU ───
+function toggleMobileMenu() {
+  const nav = document.querySelector('.nav-links');
+  if (nav.style.display === 'flex') {
+    nav.style.display = 'none';
+  } else {
+    nav.style.cssText = 'display:flex;flex-direction:column;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(10,10,10,0.98);align-items:center;justify-content:center;gap:32px;z-index:999;';
+    nav.querySelectorAll('a').forEach(a => {
+      a.style.cssText = 'font-size:1.8rem;letter-spacing:0.05em;color:var(--cream);';
+      a.addEventListener('click', () => { nav.style.display = 'none'; });
+    });
+  }
+}
+</script>
+</body>
+</html>
